@@ -1,0 +1,207 @@
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+
+
+<dom-module id="l-system">
+
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #lsystem {
+        display: block;
+        background-color: #ccc;
+        margin: auto;
+      }
+
+      paper-button {
+        background-color: var(--app-primary-color);
+        color: white;
+        display: block;
+        width: 200px;
+        margin: auto;
+        margin-top: 10px;
+        text-align: center;
+        font-weight: bold;
+      }
+
+      paper-input {
+        width: 80%;
+        margin: auto;
+      }
+
+      canvas {
+      }
+    </style>
+
+  <div id="container"><canvas id="lsystem" width="500px" height="500px"></canvas><div>
+  <paper-button id="generate">GENERATE</paper-button>
+  <paper-button id="reset">RESET</paper-button>
+  <paper-input label="axiom" value={{axiom}}></paper-input>
+  <paper-input label="angle" value={{angle}} auto-validate pattern="[0-9]*" error-message="digits only!" ></paper-input>
+  <paper-input label="initial x" value={{xinit}} auto-validate pattern="[0-9]*" error-message="digits only!" ></paper-input>
+  <paper-input label="initial y" value={{yinit}} auto-validate pattern="[0-9]*" error-message="digits only!" ></paper-input>
+  <paper-input label="Delta" value={{delta}} auto-validate pattern="[0-9]*" error-message="digits only!" ></paper-input>
+  <paper-input label="Rule for F" value={{ruleF}}></paper-input>
+  <paper-input label="Rule for G" value={{ruleG}}></paper-input>
+
+  </template>
+
+  <script>
+  Polymer({
+    is: 'l-system',
+    properties: {
+      axiom: {
+        type: String,
+        value: "F",
+      },
+      sentence: {
+        type: String
+      },
+      ruleF: {
+        type: String,
+        value: "FF+[+F-F-F]-[-F+F+F]"
+      },
+      ruleG: {
+        type: String,
+        value: "FGF"
+      },
+      angle: {
+        type: Number,
+        value: 20
+      },
+      delta: {
+        type: Number,
+        value: 10
+      },
+      xinit: {
+        type: Number,
+        value: 250
+      },
+      yinit: {
+        type: Number,
+        value: 250
+      }
+    },
+
+    applyRules: function() {
+      var new_sentence = "";
+      for( var i = 0 ; i < this.sentence.length ; i++ ){
+        switch (this.sentence.charAt(i)) {
+          case 'F':
+            new_sentence += this.ruleF;
+          break;
+          case 'G':
+            new_sentence += this.ruleG;
+          break;
+          default:
+            new_sentence += this.sentence.charAt(i);
+          break;
+        };
+      }
+      this.sentence = new_sentence;
+    },
+
+
+    ready: function() {
+      this.generate_button = this.querySelector('#generate');
+      var elm = this;
+      this.generate_button.onclick = function() {
+        elm.applyRules();
+        elm.drawResult();
+      };
+      this.reset_button = this.querySelector('#reset');
+      this.reset_button.onclick = function() {
+        elm.resetDraw();
+      }
+      this.canvas = this.querySelector('#lsystem');
+      if(!this.canvas) {
+        alert('Impossible to retrieve canvas element...');
+        return
+      }
+      this.context = this.canvas.getContext('2d');
+      if (!this.context) {
+        alert("Impossible to retrieve canvas's context");
+        return;
+      }
+
+      window.addEventListener("resize", function() { elm.windowResize(); });
+
+      this.resetDraw();
+    },
+
+    windowResize: function() {
+      this.canvas.width = this.offsetWidth;
+      console.log(this.canvas.width);
+    },
+
+    resetDraw: function() {
+      this.sentence = this.axiom;
+      this.drawResult();
+    },
+
+    drawResult: function(){
+      this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      dx = 0;
+      dy = -1;
+      var x = Number.parseInt(this.xinit);
+      var y = Number.parseInt(this.yinit);
+      this.context.beginPath();
+      this.context.lineWidth=1;
+      this.context.moveTo(x,y);
+      stack = [];
+
+      function rotate(angle) {
+        var tmp = angle*2.*Math.PI/360.;
+        var a = Math.cos(tmp)*dx - Math.sin(tmp)*dy;
+        var b = Math.sin(tmp)*dx + Math.cos(tmp)*dy;
+        dx = a;
+        dy = b;
+      }
+
+      for ( var i = 0 ; i < this.sentence.length ; i++ ){
+          switch(this.sentence.charAt(i)) {
+            case 'F':
+              this.context.moveTo(x,y);
+              x = x+dx*this.delta;
+              y = y+dy*this.delta;
+              this.context.lineTo(x,y);
+            break;
+            case 'G':
+              this.context.moveTo(x,y);
+              x = x+dx*this.delta;
+              y = y+dy*this.delta;
+              this.context.lineTo(x,y);
+            case '+':
+              rotate(this.angle);
+            break;
+            case '-':
+              rotate(-this.angle);
+            break;
+            case '[':
+              stack.push({'dx': dx, 'dy':dy, 'x':x, 'y':y});
+            break;
+            case ']':
+              var tmp = stack.pop();
+              dx = tmp.dx;
+              dy = tmp.dy;
+              x = tmp.x;
+              y = tmp.y;
+            break;
+          }
+       }
+       this.context.stroke();
+    }
+
+  });
+
+  </script>
+
+</dom-module>
