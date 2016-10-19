@@ -1,6 +1,14 @@
-# \<application-element\>
+# L-System
 
-A simple L-System visualization tool
+
+![Screenshot of the l-system app](http://librallu.github.io/images/lsystem-screen2.png)
+
+
+
+A simple L-System visualization tool build with Polymer.
+
+* Available online [Here](https://librallu.github.io/polymer-lsystem/)
+* A blog post (in french) for this app [Here](http://librallu.github.io/experiment-l-system.html)
 
 ## Install the Polymer-CLI
 
