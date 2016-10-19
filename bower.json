@@ -1,7 +1,7 @@
 {
   "name": "application-element",
   "description": "A simple L-System visualization tool",
-  "main": "application-element.html",
+  "main": "index.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
     "app-layout": "^0.10.4",
