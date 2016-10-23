@@ -65,6 +65,9 @@ A simple L-System visualization tool
           <paper-item on-tap="makeTree" >Tree</paper-item>
           <paper-item on-tap="makeKosh" >Kosh Snow Flake</paper-item>
           <paper-item on-tap="makeSomething" >Something</paper-item>
+          <paper-item on-tap="makeSierpinski" >Sierpinski Triangle</paper-item>
+          <paper-item on-tap="makeTree2" >Symetric Tree</paper-item>
+          <paper-item on-tap="makeOther2" >Something Else</paper-item>
         </paper-menu>
       </app-drawer>
 
@@ -79,7 +82,7 @@ A simple L-System visualization tool
 
         <div id="content">
           <l-system></l-system>
-        </content>
+        </div>
 
       </app-header-layout>
     </app-drawer-layout>
@@ -105,6 +108,7 @@ A simple L-System visualization tool
       makeTree: function() {
         this.lsystem.axiom = "F";
         this.lsystem.ruleF = "FF+[+F-F-F]-[-F+F+F]";
+        this.lsystem.ruleG = "";
         this.lsystem.xinit = 200;
         this.lsystem.yinit = 500;
         this.lsystem.delta = 10;
@@ -119,6 +123,7 @@ A simple L-System visualization tool
       makeKosh: function() {
         this.lsystem.axiom = "F++F++F";
         this.lsystem.ruleF = "F-F++F-F";
+        this.lsystem.ruleG = "";
         this.lsystem.xinit = 200;
         this.lsystem.yinit = 300;
         this.lsystem.delta = 2;
@@ -134,12 +139,66 @@ A simple L-System visualization tool
       makeSomething: function() {
         this.lsystem.axiom = "F-F-F-F";
         this.lsystem.ruleF = "FF-F-F-F-F-F+F";
+        this.lsystem.ruleG = "";
         this.lsystem.xinit = 400;
         this.lsystem.yinit = 300;
         this.lsystem.delta = 5;
         this.lsystem.angle = 90;
         this.lsystem.resetDraw();
         this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.drawResult();
+      },
+
+      makeSierpinski: function() {
+        this.lsystem.axiom = "F";
+        this.lsystem.ruleF = "G-F-G";
+        this.lsystem.ruleG = "F+G+F";
+        this.lsystem.xinit = 400;
+        this.lsystem.yinit = 500;
+        this.lsystem.delta = 3;
+        this.lsystem.angle = 60;
+        this.lsystem.resetDraw();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.drawResult();
+      },
+
+      makeTree2: function() {
+        this.lsystem.axiom = "F";
+        this.lsystem.ruleF = "G[+F][-F]";
+        this.lsystem.ruleG = "GG";
+        this.lsystem.xinit = 250;
+        this.lsystem.yinit = 500;
+        this.lsystem.delta = 3;
+        this.lsystem.angle = 20;
+        this.lsystem.resetDraw();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.applyRules();
+        this.lsystem.drawResult();
+      },
+
+      makeOther2: function() {
+        this.lsystem.axiom = "F+F+F+F";
+        this.lsystem.ruleF = "F+f-FF+F+FF+Ff+FF-f+FF-F-FF-Ff-FFF";
+        this.lsystem.rulef = "ffffff";
+        this.lsystem.ruleG = "";
+        this.lsystem.xinit = 150;
+        this.lsystem.yinit = 350;
+        this.lsystem.delta = 5;
+        this.lsystem.angle = 90;
+        this.lsystem.resetDraw();
         this.lsystem.applyRules();
         this.lsystem.applyRules();
         this.lsystem.drawResult();

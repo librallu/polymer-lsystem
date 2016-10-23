@@ -50,6 +50,7 @@
   <paper-input label="initial y" value={{yinit}} auto-validate pattern="[0-9]*" error-message="digits only!" ></paper-input>
   <paper-input label="Delta" value={{delta}} auto-validate pattern="[0-9]*" error-message="digits only!" ></paper-input>
   <paper-input label="Rule for F" value={{ruleF}}></paper-input>
+  <paper-input label="Rule for f" value={{rulef}}></paper-input>
   <paper-input label="Rule for G" value={{ruleG}}></paper-input>
 
   </template>
@@ -68,6 +69,10 @@
       ruleF: {
         type: String,
         value: "FF+[+F-F-F]-[-F+F+F]"
+      },
+      rulef: {
+        type: String,
+        value: ""
       },
       ruleG: {
         type: String,
@@ -100,6 +105,9 @@
           break;
           case 'G':
             new_sentence += this.ruleG;
+          break;
+          case 'f':
+            new_sentence += this.rulef;
           break;
           default:
             new_sentence += this.sentence.charAt(i);
@@ -168,16 +176,16 @@
       for ( var i = 0 ; i < this.sentence.length ; i++ ){
           switch(this.sentence.charAt(i)) {
             case 'F':
-              this.context.moveTo(x,y);
-              x = x+dx*this.delta;
-              y = y+dy*this.delta;
-              this.context.lineTo(x,y);
-            break;
             case 'G':
               this.context.moveTo(x,y);
               x = x+dx*this.delta;
               y = y+dy*this.delta;
               this.context.lineTo(x,y);
+            break;
+            case 'f':
+              x = x+dx*this.delta;
+              y = y+dy*this.delta;
+            break;
             case '+':
               rotate(this.angle);
             break;
